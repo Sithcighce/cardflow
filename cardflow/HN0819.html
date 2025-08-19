@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HN日报 - AI 科技前沿</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* New High-Contrast Theme Styling */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #1E1E1E; /* Dark Gray Background (30, 30, 30) */
+            color: #1F2937; 
+        }
+        /* 隐藏滚动条 */
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        .card {
+            width: 100%;
+            max-width: 55vh;
+            aspect-ratio: 3 / 4;
+            background-color: #FFFFFF; /* White Card Background */
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            padding: 3rem;
+            overflow: hidden;
+            position: relative;
+        }
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4A5568;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #508CAA;
+            transform: scale(1.5);
+        }
+        #export-all-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #508CAA;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+        #export-all-btn:hover {
+            background-color: #6aa0b9;
+            transform: translateX(-50%) translateY(-2px);
+        }
+        #export-all-btn:disabled {
+            background-color: #4A5568;
+            cursor: not-allowed;
+        }
+        .list-item {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #508CAA; /* New list item color */
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="pagination" class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <!-- Card 1: Title Page -->
+    <section class="card-container">
+        <div id="card1" class="card justify-center text-center bg-gray-800 text-white">
+            <div class="space-y-4">
+                <h1 class="text-2xl font-bold font-mono text-gray-400">(08-19)HN日报</h1>
+                <h2 class="text-xl font-semibold leading-tight text-gray-200">开源割草机、迷你TPU<br>AI语音工具新突破</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 2: OpenMower -->
+    <section class="card-container">
+        <div id="card2" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#1F1E4A]">🚜 OpenMower：开源自动割草机项目</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🌱 让割草机也能开源！</li>
+                    <li class="list-item">🔧 支持完全定制，硬件与软件可自由扩展</li>
+                    <li class="list-item">🌍 社区驱动，推动家庭自动化设备发展</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-200">
+                    <p class="text-lg text-[#6258D2]"><span class="font-bold">🔮 点评：</span>这是家庭自动化和 DIY 硬件爱好者的福音！开源硬件正逐步改变我们的生活方式。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 3: Tiny-TPU -->
+    <section class="card-container">
+        <div id="card3" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#1F1E4A]">🤖 Tiny-TPU：迷你版 TPU，灵感来自 Google TPU</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">💡 极简设计，专注于核心推理任务</li>
+                    <li class="list-item">⚙️ 面向学习与小型实验环境</li>
+                    <li class="list-item">🛠️ 提供开源代码，便于研究与开发</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-200">
+                    <p class="text-lg text-[#6258D2]"><span class="font-bold">🔮 点评：</span>Tiny-TPU 是 AI 硬件领域的一次有趣尝试，为开发者提供了轻量化的实验平台。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 4: Whispering -->
+    <section class="card-container">
+        <div id="card4" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#1F1E4A]">🎙️ Whispering：本地优先的开源语音识别工具</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🔊 开源语音识别，隐私友好</li>
+                    <li class="list-item">📌 支持本地运行，无需联网</li>
+                    <li class="list-item">🛡️ 提供高可靠性和数据安全性</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-200">
+                    <p class="text-lg text-[#6258D2]"><span class="font-bold">🔮 点评：</span>在隐私保护日益重要的今天，Whispering 为语音识别提供了更安全的解决方案。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 5: DBCrust -->
+    <section class="card-container">
+        <div id="card5" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#1F1E4A]">⚙️ DBCrust：现代化数据库 CLI 工具</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">📦 提供直观的命令行界面</li>
+                    <li class="list-item">💾 支持多种数据库操作，有效提高效率</li>
+                    <li class="list-item">🛠️ 面向开发者的轻量化工具</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-200">
+                    <p class="text-lg text-[#6258D2]"><span class="font-bold">🔮 点评：</span>DBCrust 是数据库管理工具的新选择，简单高效，适合现代开发者的需求。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Card 6: Anna's Archive -->
+    <section class="card-container">
+        <div id="card6" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#1F1E4A]">📚 Anna's Archive：全球免费知识库更新</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🌍 提供全球范围的免费知识资源</li>
+                    <li class="list-item">📖 覆盖书籍、论文、文档等多种内容</li>
+                    <li class="list-item">🔄 持续更新，支持开放获取</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-200">
+                    <p class="text-lg text-[#6258D2]"><span class="font-bold">🔮 点评：</span>知识无界限，Anna's Archive 是知识共享的典范，为学习者和研究者提供了无价的资源。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                dot.dataset.index = index;
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+
+            sections.forEach(section => observer.observe(section));
+
+            exportAllBtn.addEventListener('click', async () => {
+                const totalCards = cards.length;
+                exportAllBtn.disabled = true;
+                
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+
+                for (let i = 0; i < totalCards; i++) {
+                    const cardToCapture = cards[i];
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${totalCards})`;
+                    
+                    try {
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            // For white cards, we can let html2canvas determine the background
+                            // but for the dark title card, we need to specify it.
+                            backgroundColor: cardToCapture.id === 'card1' ? '#1F2937' : '#FFFFFF',
+                            useCORS: true,
+                            logging: false
+                        });
+                        
+                        const link = document.createElement('a');
+                        link.download = `card-${cardToCapture.id}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                    } catch (err) {
+                        console.error(`导出 #${cardToCapture.id} 失败:`, err);
+                    }
+                }
+
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勇气 - 水墨信笺风格</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 页面背景永远是白色 */
+        body {
+            font-family: 'Noto Serif SC', serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #FFFFFF;
+        }
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        /* 卡片内部样式 */
+        .card {
+            width: 100%;
+            max-width: 60vh; /* 适配方形比例 */
+            aspect-ratio: 1 / 1;
+            background-color: #FDFDFD; /* 极浅的米白 */
+            border: 1px solid #F0F0F0;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            padding: 4rem;
+            color: #333;
+        }
+        .pagination-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: #D1D5DB;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #C82B1E; /* 印章红 */
+            transform: scale(1.5);
+        }
+        #export-all-btn {
+            position: fixed; bottom: 2rem; left: 50%;
+            transform: translateX(-50%);
+            background-color: #C82B1E; color: #FFFFFF;
+            padding: 0.75rem 1.5rem; border-radius: 9999px;
+            font-weight: 500; cursor: pointer; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <nav id="pagination" class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <section class="card-container">
+        <div id="card1" class="card justify-center">
+            <h2 class="text-5xl font-bold mb-8">勇气，</h2>
+            <p class="text-2xl leading-relaxed text-gray-700">
+                不是站在山巅呼喊的声音，<br>
+                而是在黑夜里，<br>
+                仍愿意迈出下一步的脚步声。
+            </p>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card2" class="card justify-center">
+            <h2 class="text-5xl font-bold mb-8">勇气，</h2>
+            <p class="text-2xl leading-relaxed text-gray-700">
+                不是你没有怀疑，<br>
+                而是你在怀疑里，<br>
+                仍然选择相信一次。
+            </p>
+        </div>
+    </section>
+    
+    <section class="card-container">
+        <div id="card3" class="card justify-center">
+            <h2 class="text-5xl font-bold mb-8">勇气，</h2>
+            <p class="text-2xl leading-relaxed text-gray-700">
+                不是你不曾跌倒，<br>
+                而是每一次跌倒，<br>
+                你都在心里默念一句：<br>
+                <span class="font-bold text-gray-800 mt-4 block">——“我还要继续。”</span>
+            </p>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card4" class="card justify-between">
+            <p class="text-2xl leading-relaxed text-gray-700">
+                所以别等什么完美时机。<br>
+                哪怕手在颤，心在慌，<br>
+                也请让今天的你<br>
+                做那个<span class="text-4xl font-black text-red-800">先迈出去的人</span>。
+            </p>
+            <div class="self-end text-red-800 border-2 border-red-800 w-16 h-16 flex items-center justify-center text-3xl font-bold">
+                勇
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+            if (sections.length === 0) return;
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        if (dots[index]) dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+            sections.forEach(section => observer.observe(section));
+            exportAllBtn.addEventListener('click', async () => {
+                exportAllBtn.disabled = true;
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+                for (let i = 0; i < cards.length; i++) {
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
+                    const cardToCapture = cards[i];
+                    try {
+                        const cardBgColor = window.getComputedStyle(cardToCapture).backgroundColor;
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            backgroundColor: cardBgColor,
+                            useCORS: true, logging: false
+                        });
+                        const link = document.createElement('a');
+                        link.download = `courage-${i + 1}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (err) { console.error(`导出失败:`, err); }
+                }
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

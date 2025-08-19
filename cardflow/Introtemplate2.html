@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能小恐龙 - 炫彩科技风格</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 页面背景永远是白色 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #FFFFFF;
+        }
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        /* 卡片内部样式：定宽可变高 */
+        .card {
+            width: 100%;
+            max-width: 420px;
+            height: auto;
+            background-color: #111827; /* 深空灰 */
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            color: #D1D5DB;
+        }
+        .gradient-text {
+            background-image: linear-gradient(to right, #818CF8, #C084FC);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .pagination-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: #4B5563;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #A78BFA; /* 亮紫色 */
+            transform: scale(1.5);
+            box-shadow: 0 0 8px #A78BFA;
+        }
+        #export-all-btn {
+            position: fixed; bottom: 2rem; left: 50%;
+            transform: translateX(-50%);
+            background-image: linear-gradient(to right, #818CF8, #C084FC);
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem; border-radius: 9999px;
+            font-weight: 700; cursor: pointer; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <nav id="pagination" class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <section class="card-container">
+        <div id="card1" class="card space-y-5">
+            <div class="text-center">
+                <p class="font-bold gradient-text">🎁【超人气爆款】</p>
+                <h1 class="text-3xl font-black text-white">智能互动小恐龙玩具 🦖</h1>
+                <p class="text-gray-400 mt-2">✨ 宝宝的新伙伴，爸妈的好帮手！</p>
+            </div>
+            
+            <div class="bg-gray-800 p-4 rounded-lg space-y-3">
+                <p>• <span class="font-bold text-white">动态交互</span>：会走路，会摇尾巴</p>
+                <p>• <span class="font-bold text-white">多功能模式</span>：唱歌 / 讲故事 / 学英语 🎶</p>
+                <p>• <span class="font-bold text-white">安全认证</span>：环保材质，无忧畅玩</p>
+            </div>
+
+            <div class="border-t border-b border-gray-700 py-4">
+                <h2 class="text-lg font-bold text-center text-white mb-3">核心参数</h2>
+                <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                    <p><strong class="text-gray-400">适合人群:</strong> 3岁+宝宝</p>
+                    <p><strong class="text-gray-400">产品尺寸:</strong> 20cm × 12cm</p>
+                    <p><strong class="text-gray-400">供电方式:</strong> AAA × 3 (需自备)</p>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-lg font-bold text-center text-white mb-3">🔥 核心优势</h2>
+                <ul class="space-y-2 text-sm">
+                    <li class="p-3 bg-gray-800 rounded-md"><strong>【会动】</strong> 比普通玩偶更生动，吸引宝宝注意力！</li>
+                    <li class="p-3 bg-gray-800 rounded-md"><strong>【会说】</strong> 集学习与娱乐于一体，寓教于乐！</li>
+                    <li class="p-3 bg-gray-800 rounded-md"><strong>【可爱】</strong> 萌趣造型，随手一拍就是爆款图！</li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-900 border border-purple-400/50 p-4 rounded-lg">
+                <h3 class="font-bold text-center text-white">🛒 用户真实评价</h3>
+                <p class="text-yellow-400 text-center mt-1">🌟🌟🌟🌟🌟</p>
+                <p class="text-xs italic text-gray-400 mt-2">“宝宝一见就不撒手！晚上都要抱着睡觉，声音温柔不刺耳，真的很满意！”</p>
+            </div>
+
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-center p-4 rounded-lg mt-2">
+                <p class="text-lg font-bold">💥 今日下单：立享 7 折优惠 + 包邮到家！</p>
+                <p class="text-xs">数量有限，卖完即止！🏃‍♀️💨</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- (JS Script is the same as above) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+            if (sections.length === 0) return;
+            if (sections.length > 1) {
+                sections.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('pagination-dot');
+                    paginationContainer.appendChild(dot);
+                    dots.push(dot);
+                });
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const index = Array.from(sections).indexOf(entry.target);
+                            dots.forEach(d => d.classList.remove('active'));
+                            if (dots[index]) dots[index].classList.add('active');
+                        }
+                    });
+                }, { threshold: 0.7 });
+                sections.forEach(section => observer.observe(section));
+            } else {
+                paginationContainer.style.display = 'none';
+            }
+            exportAllBtn.addEventListener('click', async () => {
+                exportAllBtn.disabled = true;
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+                for (let i = 0; i < cards.length; i++) {
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
+                    const cardToCapture = cards[i];
+                    try {
+                        const cardBgColor = window.getComputedStyle(cardToCapture).backgroundColor;
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            backgroundColor: cardBgColor,
+                            useCORS: true, logging: false
+                        });
+                        const link = document.createElement('a');
+                        link.download = `dino-toy-${i + 1}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (err) { console.error(`导出失败:`, err); }
+                }
+                if (sections.length > 1) paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

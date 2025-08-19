@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡片式布局模板库</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* 中性黑白主题 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #f0f0f0; /* 浅灰色背景 */
+            color: #333333;
+        }
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        .card {
+            width: 100%;
+            max-width: 45vh;
+            aspect-ratio: 9 / 16;
+            background-color: #ffffff; /* 卡片白色背景 */
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* 内容从顶部开始 */
+            align-items: flex-start; /* 内容左对齐 */
+            text-align: left;
+            padding: 3rem;
+            overflow-y: auto; /* 当内容超长时允许内部滚动 */
+        }
+        .pagination-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: #cccccc;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #333333;
+            transform: scale(1.5);
+        }
+        #export-all-btn {
+            position: fixed; bottom: 2rem; left: 50%;
+            transform: translateX(-50%);
+            background-color: #333333; color: #ffffff;
+            padding: 0.75rem 1.5rem; border-radius: 9999px;
+            font-size: 1rem; font-weight: 500; cursor: pointer;
+            border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.2s ease; z-index: 20;
+        }
+        .code-block {
+            font-family: 'Source Code Pro', monospace;
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            color: #333;
+            width: 100%;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="pagination" class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <section class="card-container">
+        <div id="card1" class="card justify-center text-center">
+            <div class="w-full space-y-4">
+                <p class="text-lg text-gray-500 font-light">系列主题或分类</p>
+                <h1 class="text-4xl font-black leading-tight">这里是主标题</h1>
+                <h2 class="text-xl text-gray-700 font-medium pt-2">这里是副标题，用于补充说明</h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card2" class="card">
+            <h2 class="text-2xl font-bold mb-6 w-full">文章小标题</h2>
+            <div class="space-y-4 text-base text-gray-800 leading-relaxed">
+                <p>这是一段正文文本。Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
+                <p>这是另一段正文。Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie.</p>
+                <a href="#" class="text-blue-600 hover:underline pt-4 block">这是一个超链接 &rarr;</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="card-container">
+        <div id="card3" class="card">
+             <h2 class="text-2xl font-bold mb-6 w-full">核心观点或问题</h2>
+             <p class="text-base text-gray-600 mb-8">这是一段引导性文本，用于介绍接下来的引言或评论。Donec nec justo eget felis facilisis fermentum.</p>
+             <blockquote class="w-full border-l-4 border-gray-300 pl-4 py-2 space-y-3">
+                <p class="text-lg font-medium text-gray-800">“这里是引用的评论或名言。Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.”</p>
+                <footer class="text-base text-gray-500">- 评论来源或作者</footer>
+             </blockquote>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card4" class="card">
+            <h2 class="text-2xl font-bold mb-6 w-full">要点列表</h2>
+            <ul class="w-full space-y-4 list-disc list-inside text-base text-gray-800">
+                <li>第一点：这是列表项的详细描述。Nullam sit amet magna in magna gravida vehicula.</li>
+                <li>第二点：这是列表项的详细描述。Mauris tincidunt sem sed arcu.</li>
+                <li>第三点：这是列表项的详细描述。Morbi scelerisque luctus velit.</li>
+                <li>第四点：这是列表项的详细描述。Pellentesque sapien.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card5" class="card">
+            <h3 class="text-xl font-semibold text-gray-800 w-full">一个有趣的转折点</h3>
+            <p class="text-base text-gray-600 my-4">在深入探讨之前，先看一个案例。In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Duis sapien nunc, commodo et, interdum suscipit.</p>
+            <div class="w-full aspect-video bg-gray-200 rounded-lg my-4 flex items-center justify-center">
+                <span class="text-gray-400">图片占位符 (16:9)</span>
+            </div>
+            <p class="text-base text-gray-800 leading-relaxed">基于以上案例，我们可以得出结论。Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        </div>
+    </section>
+    
+    <section class="card-container">
+        <div id="card6" class="card">
+            <h2 class="text-2xl font-bold mb-6 w-full">技术实现示例</h2>
+            <p class="text-base text-gray-600 mb-6">下面是一段代码示例，用于说明具体实现。Ut enim ad minim veniam, quis nostrud exercitation.</p>
+            <div class="code-block">
+<pre><code>function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+
+greet('World');</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+
+            if (sections.length === 0) return;
+
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                dot.dataset.index = index;
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        if (dots[index]) dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+
+            sections.forEach(section => observer.observe(section));
+
+            exportAllBtn.addEventListener('click', async () => {
+                exportAllBtn.disabled = true;
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+
+                for (let i = 0; i < cards.length; i++) {
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
+                    const cardToCapture = cards[i];
+                    try {
+                        const cardBgColor = window.getComputedStyle(cardToCapture).backgroundColor;
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            backgroundColor: cardBgColor,
+                            useCORS: true, logging: false
+                        });
+                        const link = document.createElement('a');
+                        link.download = `layout-template-${i + 1}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (err) {
+                        console.error(`导出卡片 #${i + 1} 失败:`, err);
+                    }
+                }
+
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAll.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

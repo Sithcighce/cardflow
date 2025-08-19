@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顶尖高校创业差异</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 使用 Noto Sans SC 字体 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #F5F5F0; /* 米色背景 */
+        }
+        /* 隐藏滚动条 */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* 每个 section 作为全屏容器，用于垂直居中卡片 */
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        /* 9:16 卡片样式 */
+        .card {
+            width: 100%;
+            max-width: 45vh; /* 在宽屏上限制宽度，保持手机屏幕大小 */
+            aspect-ratio: 9 / 16;
+            background-color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2.5rem; /* 内部留白 */
+            overflow: hidden;
+            position: relative;
+        }
+        /* 分页导航样式 */
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #D1D5DB; /* 灰色 */
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #374151; /* 深灰色 */
+            transform: scale(1.5);
+        }
+        /* 全局导出按钮样式 */
+        #export-all-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #374151;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+        #export-all-btn:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        #export-all-btn:disabled {
+            background-color: #9CA3AF;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- 分页导航 -->
+    <nav id="pagination" class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+
+    <!-- 全局导出按钮 -->
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <!-- Card 1: 标题页 -->
+    <section class="card-container">
+        <div id="card1" class="card">
+            <div class="space-y-3 md:space-y-4">
+                <h2 class="text-xl md:text-2xl font-medium text-gray-500">在创业领域</h2>
+                <h1 class="text-2xl md:text-3xl font-black leading-tight text-gray-900">中国的顶尖高校<br>和<br>美国的顶尖高校</h1>
+                <h2 class="text-2xl md:text-2xl font-bold text-gray-700">到底差在哪里？</h2>
+                <p class="text-base md:text-lg text-gray-400 pt-6">
+                    ps：我和我的 bro 们一直混迹在 top2<br>所以还是能“骂”一下贵校的 hhh
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 2: 氛围 -->
+    <section class="card-container">
+        <div id="card2" class="card">
+            <div class="max-w-md w-full space-y-4">
+                <h2 class="text-3xl md:text-3xl font-bold text-gray-900">是氛围吗？</h2>
+                <p class="text-lg md:text-xl text-gray-600 pt-2">试想一下：</p>
+                <div class="text-left bg-gray-50 border border-gray-200 p-4 rounded-xl space-y-2 text-lg md:text-xl">
+                    <p>一个北大清华的学生</p>
+                    <p>突然对导师说：</p>
+                    <p class="font-bold text-gray-800">“老师，我不读博了，我要创业！”</p>
+                </div>
+                <p class="text-lg md:text-xl text-gray-600">结果会怎样？</p>
+                <p class="text-xl md:text-xl font-semibold">👉 家长第一个站出来反对</p>
+                <p class="text-xl md:text-xl font-semibold">👉 甚至“打断他的腿”</p>
+                <div class="pt-4 text-base md:text-lg text-gray-500 leading-relaxed">
+                    <p>在国内，这样的选择往往意味着巨大压力。</p>
+                    <p>但在硅谷，休学创业几乎是正常选项。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 3: 破釜沉舟 -->
+    <section class="card-container">
+        <div id="card3" class="card">
+            <div class="max-w-md w-full space-y-6">
+                <p class="text-3xl md:text-3xl font-black text-gray-400">但是——</p>
+                <div class="text-2xl md:text-2xl font-bold leading-loose">
+                    <p>若没有 <span class="text-gray-800">破釜沉舟</span> 的心，</p>
+                    <p>怎么能挣脱 <span class="text-gray-800">世俗的枷锁</span>，</p>
+                    <p>走出属于 <span class="text-gray-800">自己的路</span>？</p>
+                </div>
+                <div class="pt-6 text-lg md:text-xl text-gray-500 leading-relaxed">
+                    <p>社会压力能拦住大多数人，</p>
+                    <p>却拦不住那些</p>
+                    <p class="text-2xl md:text-2xl font-bold text-gray-900 mt-2">注定要飞的鸟。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 4: 人脉 -->
+    <section class="card-container">
+        <div id="card4" class="card">
+            <h2 class="text-4xl md:text-4xl font-black text-center text-gray-900">那是人脉吗？</h2>
+        </div>
+    </section>
+
+    <!-- Card 5: 资源 -->
+    <section class="card-container">
+        <div id="card5" class="card">
+            <div class="max-w-md w-full space-y-5">
+                <p class="text-2xl md:text-2xl font-bold leading-relaxed text-gray-900">
+                    资源，从来不是普遍的。<br>
+                    它永远掌握在<span class="text-gray-700">少数人</span>手里。
+                </p>
+                <div class="text-lg md:text-xl text-gray-600 leading-relaxed pt-4">
+                    <p>就算你在斯坦福，</p>
+                    <p>谁能保证三个月内</p>
+                    <p>就把商业计划书</p>
+                    <p>直接放到 <span class="font-mono font-bold text-gray-800">a16z</span> 桌上？</p>
+                </div>
+                <div class="pt-4 space-y-2">
+                    <p class="text-2xl md:text-2xl font-bold text-gray-900">这不是必然。</p>
+                    <p class="text-lg md:text-xl text-gray-500">更多还是看 个人能力与机缘。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 6: 视野 -->
+    <section class="card-container">
+        <div id="card6" class="card">
+            <div class="max-w-md w-full space-y-6">
+                <h3 class="text-xl md:text-2xl font-medium text-gray-500">最根本的差别在于——</h3>
+                <h2 class="text-4xl md:text-4xl font-black text-gray-800">视野。</h2>
+                <div class="text-lg md:text-xl text-gray-700 leading-relaxed space-y-3 pt-3">
+                    <p>美国高校的环境<br>天然连接着全球最前沿的想法和趋势。</p>
+                    <p class="font-semibold">这种视野，塑造了学生的雄心与眼界。</p>
+                </div>
+                <div class="text-lg md:text-xl text-gray-500 leading-relaxed pt-3">
+                    <p>相比之下，国内的创业环境更容易被现实条件、既有路径所束缚。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+
+            // 1. 创建分页圆点
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                dot.dataset.index = index;
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+
+            // 2. 使用 IntersectionObserver 监听哪个页面在视口中
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+
+            sections.forEach(section => observer.observe(section));
+
+            // 3. 为“一键导出”按钮添加事件监听
+            exportAllBtn.addEventListener('click', async () => {
+                // 禁用按钮并更新文本提示
+                exportAllBtn.disabled = true;
+                exportAllBtn.textContent = '导出中... (1/6)';
+                
+                // 导出前暂时隐藏UI元素
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+
+                // 循环处理每个卡片
+                for (let i = 0; i < cards.length; i++) {
+                    const cardToCapture = cards[i];
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
+                    
+                    try {
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3, // 使用3倍分辨率以获得更清晰的图像
+                            backgroundColor: '#FFFFFF', // 确保背景色为白色
+                            useCORS: true,
+                            logging: false
+                        });
+                        
+                        // 创建一个临时的 a 标签用于下载
+                        const link = document.createElement('a');
+                        link.download = `card-${cardToCapture.id}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+
+                        // 在两次下载之间增加短暂延迟，以防浏览器阻止
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                    } catch (err) {
+                        console.error(`导出 #${cardToCapture.id} 失败:`, err);
+                    }
+                }
+
+                // 导出后恢复UI元素
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

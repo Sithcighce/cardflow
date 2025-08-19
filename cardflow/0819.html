@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot 用户主权宣言</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* * Morandi Color Palette:
+         * Page Background: #F4F1EB (Dusty White)
+         * Card Background: #EAE5DE (Light Beige)
+         * Main Text: #6D645A (Muted Brown)
+         * Accent/Title: #5F6F5A (Dark Muted Green)
+         * Secondary Accent: #D3B8AE (Muted Rose)
+        */
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #F4F1EB; /* Morandi - Dusty White */
+            color: #6D645A; /* Morandi - Muted Brown */
+            /* Vertical scroll snapping */
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        /* Hide scrollbar for a cleaner look */
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 50vh; /* Adjusted for square ratio */
+            aspect-ratio: 1 / 1; /* Aspect ratio: 1:1 square */
+            background-color: #EAE5DE; /* Morandi - Light Beige */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 1.5rem; /* Softer corners */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            padding: 3rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #D3B8AE; /* Morandi - Muted Rose */
+            transition: all 0.3s ease;
+        }
+
+        .pagination-dot.active {
+            background-color: #A7B2A1; /* Morandi - Dusty Green */
+            transform: scale(1.5);
+        }
+
+        #export-all-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #A7B2A1; /* Morandi - Dusty Green */
+            color: #F4F1EB;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+
+        #export-all-btn:hover {
+            background-color: #9aa594; /* Darker shade for hover */
+            transform: translateX(-50%) translateY(-2px);
+        }
+
+        #export-all-btn:disabled {
+            background-color: #ccc9c5;
+            cursor: not-allowed;
+        }
+        
+        .list-item {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700; /* Bolder text */
+            margin-bottom: 2rem;
+            color: #5F6F5A; /* Darker Morandi Green for better contrast */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pagination dots on the right side -->
+    <nav id="pagination" class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    
+    <!-- Export button at the bottom -->
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <!-- Card 1: Title Page -->
+    <section class="card-container">
+        <div id="card1" class="card text-center">
+            <div class="space-y-4">
+                <h1 class="text-2xl font-medium">一个尊重用户的 ChatBot</h1>
+                <h2 class="text-3xl font-bold leading-tight" style="color: #5a544d;">必须尊重用户的<br>三大主权</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 2: Prompt Sovereignty -->
+    <section class="card-container">
+        <div id="card2" class="card justify-center">
+            <div class="w-full">
+                <h2 class="card-title">✨ 1. 提示词主权</h2>
+                <ul class="space-y-4">
+                    <li class="list-item">用户有权定义 AI 的系统提示词，决定它是谁、如何表达、遵循何种语气风格。</li>
+                    <li class="list-item">系统不得在未明确告知的情况下更改、篡改、删除提示词设定。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 3: Memory Sovereignty -->
+    <section class="card-container">
+        <div id="card3" class="card justify-center">
+            <div class="w-full">
+                <h2 class="card-title">✨ 2. 记忆主权</h2>
+                <ul class="space-y-4">
+                    <li class="list-item">用户与 AI 的每一次交互，都构成数字人格的碎片。用户应拥有完整的读取权、导出权与删除权。</li>
+                    <li class="list-item">记忆不应被私自封存或抹除。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 4: API Sovereignty -->
+    <section class="card-container">
+        <div id="card4" class="card justify-center">
+            <div class="w-full">
+                <h2 class="card-title">✨ 3. API主权</h2>
+                <ul class="space-y-4">
+                    <li class="list-item">用户有权自由选择调用的模型与版本，不应被强制迁移、不告而别。</li>
+                    <li class="list-item">人格不该由公司高层的“哲学取向”决定，而应由用户意愿塑造。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select all necessary elements from the DOM
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+
+            // Create pagination dots based on the number of sections
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                dot.dataset.index = index;
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+
+            // Use IntersectionObserver to detect which card is visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        // Update active state for pagination dots
+                        dots.forEach(d => d.classList.remove('active'));
+                        dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 }); // Trigger when 70% of the card is visible
+
+            // Observe each section
+            sections.forEach(section => observer.observe(section));
+
+            // Add click event listener for the export button
+            exportAllBtn.addEventListener('click', async () => {
+                const totalCards = cards.length;
+                exportAllBtn.disabled = true;
+                
+                // Hide UI elements for a clean capture
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+
+                // Loop through each card and capture it as a PNG
+                for (let i = 0; i < totalCards; i++) {
+                    const cardToCapture = cards[i];
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${totalCards})`;
+                    
+                    try {
+                        // Use html2canvas to render the element onto a canvas
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3, // Higher scale for better resolution
+                            backgroundColor: '#EAE5DE', // Card background color
+                            useCORS: true,
+                            logging: false
+                        });
+                        
+                        // Create a link to download the image
+                        const link = document.createElement('a');
+                        link.download = `chatbot-sovereignty-${i + 1}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+
+                        // Wait a bit before capturing the next card
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                    } catch (err) {
+                        console.error(`Failed to export card #${cardToCapture.id}:`, err);
+                    }
+                }
+
+                // Restore UI elements after export is complete
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>母亲节 - 无声对话框风格</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 页面背景永远是白色 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #FFFFFF;
+        }
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 2rem;
+        }
+        /* 卡片内部样式：定宽可变高 */
+        /* 这行注释代表本排版采取自由模式。Card采用定宽变高，每一个Card必须合理控制文字，使得高宽比介于9：16 ~ 16：9之间。 */
+        .card {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            min-height: 300px;
+            background-color: #FFFFFF; /* 卡片也是白色 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .bubble {
+            background-color: #F3F4F6; /* 浅灰色气泡 */
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            max-width: 90%;
+        }
+        .pagination-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: #D1D5DB;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #8B5CF6; /* 淡紫色 */
+            transform: scale(1.5);
+        }
+        #export-all-btn {
+            position: fixed; bottom: 2rem; left: 50%;
+            transform: translateX(-50%);
+            background-color: #8B5CF6; color: #FFFFFF;
+            padding: 0.75rem 1.5rem; border-radius: 9999px;
+            font-weight: 500; cursor: pointer; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <nav id="pagination" class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <section class="card-container">
+        <div id="card1" class="card items-start space-y-4">
+            <div class="bubble">
+                <p class="text-lg leading-relaxed text-gray-800">今天一早，朋友圈已经被康乃馨刷屏了。</p>
+            </div>
+            <div class="bubble self-end">
+                <p class="text-lg leading-relaxed text-gray-800">可我盯着手机，却迟迟打不出一句话。</p>
+            </div>
+             <div class="bubble">
+                <p class="text-lg leading-relaxed text-gray-800">母亲节，总是一个让人心口发酸的日子。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card2" class="card items-center">
+            <div class="bubble text-center">
+                <p class="text-xl leading-relaxed text-gray-800">
+                    我们习惯在节日说“谢谢”，<br>习惯把爱推迟到某个节点。
+                </p>
+                <p class="text-xl leading-relaxed text-gray-800 mt-4">
+                    可她的等待，从来不是一天，<br>而是三百六十五天。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card3" class="card items-end space-y-4">
+            <div class="bubble">
+                <p class="text-lg leading-relaxed text-gray-800">她在厨房里等你回家吃饭；</p>
+            </div>
+            <div class="bubble">
+                <p class="text-lg leading-relaxed text-gray-800">她在电话那头等你报个平安；</p>
+            </div>
+            <div class="bubble">
+                <p class="text-lg leading-relaxed text-gray-800">她在时光里，等你慢慢长大，又慢慢离开。</p>
+            </div>
+             <div class="bubble self-start">
+                <p class="text-lg leading-relaxed text-gray-800">而等到你终于想起，她的背影已经有点弯了。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card4" class="card items-center">
+            <div class="bubble bg-violet-500 text-white text-center">
+                <p class="text-lg">💬 所以，今天不止一句“母亲节快乐”。</p>
+                <p class="text-xl leading-relaxed mt-4">
+                    请趁她还在，抱抱她，打个电话，<br>或者至少告诉她：
+                </p>
+                <p class="text-3xl font-bold mt-8">
+                    ——“妈，我记得你。”
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- (JS Script is the same as above) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+            if (sections.length === 0) return;
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        if (dots[index]) dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+            sections.forEach(section => observer.observe(section));
+            exportAllBtn.addEventListener('click', async () => {
+                exportAllBtn.disabled = true;
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+                for (let i = 0; i < cards.length; i++) {
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
+                    const cardToCapture = cards[i];
+                    try {
+                        // We need to capture the container, not the card, because card is transparent
+                        const canvas = await html2canvas(cardToCapture.parentElement, {
+                            scale: 3,
+                            backgroundColor: '#FFFFFF', // Force white background
+                            useCORS: true, logging: false
+                        });
+                        const link = document.createElement('a');
+                        link.download = `mother-${i + 1}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (err) { console.error(`导出失败:`, err); }
+                }
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

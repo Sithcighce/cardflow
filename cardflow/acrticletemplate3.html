@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>母亲节 - 花店便签风格</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+    <style>
+        /* 页面背景永远是白色 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #FFFFFF;
+        }
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 2rem;
+        }
+        /* 卡片内部样式：定宽可变高 */
+        /* 这行注释代表本排版采取自由模式。Card采用定宽变高，每一个Card必须合理控制文字，使得高宽比介于9：16 ~ 16：9之间。 */
+        .card {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            min-height: 300px;
+            background-color: #FEF6F6; /* 极浅的粉色 */
+            border: 1px solid #F8E8E8;
+            box-shadow: 0 6px 25px rgba(200, 150, 150, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem;
+            color: #6D5D5D;
+            position: relative;
+            overflow: hidden;
+        }
+        .handwritten {
+            font-family: 'Zhi Mang Xing', cursive;
+        }
+        .pagination-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: #D1D5DB;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #4CAF50; /* 清新绿 */
+            transform: scale(1.5);
+        }
+        #export-all-btn {
+            position: fixed; bottom: 2rem; left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50; color: #FFFFFF;
+            padding: 0.75rem 1.5rem; border-radius: 9999px;
+            font-weight: 700; cursor: pointer; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <nav id="pagination" class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <section class="card-container">
+        <div id="card1" class="card">
+            <!-- Decorative SVG -->
+            <svg class="absolute -top-8 -left-12 w-32 h-32 text-green-100" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+            <p class="text-xl leading-relaxed handwritten">
+                今天一早，朋友圈已经被康乃馨刷屏了。
+            </p>
+             <p class="text-xl leading-relaxed handwritten mt-4">
+                可我盯着手机，却迟迟打不出一句话。
+            </p>
+            <p class="text-2xl font-bold text-center text-pink-500 mt-10">
+                母亲节，总是一个让人心口发酸的日子。
+            </p>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card2" class="card text-center">
+            <p class="text-2xl leading-loose">
+                我们习惯在节日说“谢谢”，<br>习惯把爱推迟到某个节点。
+            </p>
+            <p class="text-2xl leading-loose font-bold text-gray-700 mt-6">
+                可她的等待，从来不是一天，<br>而是三百六十五天。
+            </p>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card3" class="card">
+            <ul class="space-y-4 text-xl handwritten text-center">
+                <li>她在厨房里等你回家吃饭；</li>
+                <li>她在电话那头等你报个平安；</li>
+                <li>她在时光里，等你慢慢长大，又慢慢离开。</li>
+            </ul>
+            <p class="text-xl text-center mt-8">
+                而等到你终于想起，<br>她的背影已经有点弯了。
+            </p>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card4" class="card text-center">
+             <p class="text-lg text-gray-500 mb-6">💬 所以，今天不止一句“母亲节快乐”。</p>
+             <p class="text-2xl leading-relaxed">
+                请趁她还在，抱抱她，打个电话，<br>或者至少告诉她：
+            </p>
+            <div class="border-t border-b border-pink-200 py-6 my-8">
+                <p class="text-4xl font-bold text-green-700 handwritten">
+                    “妈，我记得你。”
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- (JS Script is the same as above) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+            if (sections.length === 0) return;
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        if (dots[index]) dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+            sections.forEach(section => observer.observe(section));
+            exportAllBtn.addEventListener('click', async () => {
+                exportAllBtn.disabled = true;
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+                for (let i = 0; i < cards.length; i++) {
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
+                    const cardToCapture = cards[i];
+                    try {
+                        const cardBgColor = window.getComputedStyle(cardToCapture).backgroundColor;
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            backgroundColor: cardBgColor,
+                            useCORS: true, logging: false
+                        });
+                        const link = document.createElement('a');
+                        link.download = `mother-${i + 1}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (err) { console.error(`导出失败:`, err); }
+                }
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

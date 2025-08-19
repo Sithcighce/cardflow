@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HN日报 - AI 科技前沿</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* VS Code Theme Inspired Styling */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #1E1E1E; /* VS Code Editor Background */
+            color: #D4D4D4; /* Default Text Color */
+        }
+        /* 隐藏滚动条 */
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        .card {
+            width: 100%;
+            max-width: 45vh;
+            aspect-ratio: 9 / 16;
+            background-color: #252526; /* VS Code Sidebar Background */
+            border: 1px solid #333333;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            padding: 2.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #444444;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #569CD6; /* VS Code Blue */
+            transform: scale(1.5);
+        }
+        #export-all-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #569CD6; /* VS Code Blue */
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #333333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+        #export-all-btn:hover {
+            background-color: #4088C4;
+            transform: translateX(-50%) translateY(-2px);
+        }
+        #export-all-btn:disabled {
+            background-color: #333333;
+            cursor: not-allowed;
+        }
+        .list-item {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #CCCCCC;
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="pagination" class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <!-- Card 1: Title Page -->
+    <section class="card-container">
+        <div id="card1" class="card justify-center text-center">
+            <div class="space-y-4">
+                <h1 class="text-2xl font-bold font-mono text-gray-400">(08-18)HN日报</h1>
+                <h2 class="text-xl font-semibold leading-tight text-gray-200">Llama-Scan本地PDF转文本神器<br>Google承认反竞争行为</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 2: Llama-Scan -->
+    <section class="card-container">
+        <div id="card2" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#569CD6]">📄 Llama-Scan：本地 LLM PDF 转文本工具</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">📌 支持本地运行，保护隐私</li>
+                    <li class="list-item">📂 将 PDF 转换为可编辑文本</li>
+                    <li class="list-item">💻 结合本地 LLM，无需联网</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-[#C98870]"><span class="font-bold">🔮 点评：</span>隐私优先的文档处理工具，适合对数据安全敏感的企业和个人用户。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 3: Google -->
+    <section class="card-container">
+        <div id="card3" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#569CD6]">🌍 Google 承认在澳洲搜索市场反竞争行为</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">📢 Google 官方声明承认违规</li>
+                    <li class="list-item">⚖️ 涉及限制竞争对手使用搜索引擎</li>
+                    <li class="list-item">🌐 或对全球科技监管产生连锁反应</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-[#C98870]"><span class="font-bold">🔮 点评：</span>科技巨头的行为正在受到更严格的监管，或将引发行业新规则的制定。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 4: OverType -->
+    <section class="card-container">
+        <div id="card4" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#569CD6]">🖋️ OverType：极简 Markdown WYSIWYG 编辑器</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🖌️ 仅基于文本区域实现所见即所得</li>
+                    <li class="list-item">💡 轻量级，无需复杂安装</li>
+                    <li class="list-item">🚀 适合快速编辑和初学者使用</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-[#C98870]"><span class="font-bold">🔮 点评：</span>极简主义的 Markdown 编辑器，提供了快速上手的可能性，适合轻量需求用户。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 5: Nvidia Tilus -->
+    <section class="card-container">
+        <div id="card5" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#569CD6]">🛠️ Nvidia Tilus：全新 Tile-Level GPU 编程语言</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">  专为 GPU Tile-Level 编程设计</li>
+                    <li class="list-item">⚡ 提供高效的低级别控制</li>
+                    <li class="list-item">🖥️ 面向高性能计算和图形应用</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-[#C98870]"><span class="font-bold">🔮 点评：</span>GPU 编程语言的新突破，或将推动图形处理和 AI 应用的性能极限。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Card 6: NUMA -->
+    <section class="card-container">
+        <div id="card6" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-[#569CD6]">⚙️ NUMA 正在重塑微服务部署</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🧩 非统一内存访问 (NUMA) 模型</li>
+                    <li class="list-item">📈 提升微服务性能与资源利用率</li>
+                    <li class="list-item">🔄 为复杂分布式系统提供新思路</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-[#C98870]"><span class="font-bold">🔮 点评：</span>NUMA 的应用正在改变微服务架构的设计模式，值得架构师深入研究。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                dot.dataset.index = index;
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+
+            sections.forEach(section => observer.observe(section));
+
+            exportAllBtn.addEventListener('click', async () => {
+                const totalCards = cards.length;
+                exportAllBtn.disabled = true;
+                
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+
+                for (let i = 0; i < totalCards; i++) {
+                    const cardToCapture = cards[i];
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${totalCards})`;
+                    
+                    try {
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            backgroundColor: '#252526', // Card background color
+                            useCORS: true,
+                            logging: false
+                        });
+                        
+                        const link = document.createElement('a');
+                        link.download = `card-${cardToCapture.id}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                    } catch (err) {
+                        console.error(`导出 #${cardToCapture.id} 失败:`, err);
+                    }
+                }
+
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>
+ 

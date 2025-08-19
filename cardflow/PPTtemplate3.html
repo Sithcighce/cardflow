@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>未来三个月的计划 - 荧光便利贴风格</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        /* 页面背景永远是白色 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #FFFFFF;
+        }
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        /* 卡片内部样式 */
+        .card {
+            width: 100%;
+            max-width: 80vh;
+            aspect-ratio: 16 / 9;
+            background-color: #1A202C; /* 卡片使用深色背景 */
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            padding: 3rem;
+            color: #F7FAFC;
+        }
+        .handwritten {
+            font-family: 'ZCOOL KuaiLe', cursive;
+        }
+        .pagination-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: #D1D5DB;
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #48BB78; /* 亮绿色 */
+            transform: scale(1.5);
+            box-shadow: 0 0 8px #48BB78;
+        }
+        #export-all-btn {
+            position: fixed; bottom: 2rem; left: 50%;
+            transform: translateX(-50%);
+            background-color: #48BB78; color: #1A202C;
+            padding: 0.75rem 1.5rem; border-radius: 9999px;
+            font-weight: 700; cursor: pointer; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <nav id="pagination" class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <section class="card-container">
+        <div id="card1" class="card justify-center items-center text-center">
+            <div class="space-y-4">
+                <h1 class="text-7xl font-black handwritten text-green-400">3-Month Plan!</h1>
+                <p class="text-2xl text-gray-300">未来三个月的突击计划</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-container">
+        <div id="card2" class="card justify-center items-center">
+            <div class="grid grid-cols-3 gap-6 w-full">
+                <!-- 目标一 -->
+                <div class="bg-yellow-300 text-gray-800 p-6 rounded-lg shadow-lg transform -rotate-2">
+                    <h2 class="text-2xl font-bold handwritten border-b-2 border-gray-600 pb-2">目标 #1</h2>
+                    <p class="text-lg font-bold mt-3">AI 工具链</p>
+                    <p class="text-sm">能跑就行！</p>
+                </div>
+                <!-- 目标二 -->
+                <div class="bg-pink-400 text-white p-6 rounded-lg shadow-lg transform rotate-1">
+                    <h2 class="text-2xl font-bold handwritten border-b-2 border-white pb-2">目标 #2</h2>
+                    <p class="text-lg font-bold mt-3">用户测试</p>
+                    <p class="text-sm">👪 👭 🤡</p>
+                </div>
+                <!-- 目标三 -->
+                <div class="bg-blue-400 text-white p-6 rounded-lg shadow-lg transform -rotate-1">
+                    <h2 class="text-2xl font-bold handwritten border-b-2 border-white pb-2">目标 #3</h2>
+                    <p class="text-lg font-bold mt-3">对外发声</p>
+                    <p class="text-sm">抢占话语权！</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="card-container">
+        <div id="card3" class="card justify-center items-center flex-col text-center">
+            <div class="bg-gray-700 p-8 rounded-xl w-3/4 space-y-6">
+                <h2 class="text-2xl font-bold text-gray-300"># 评论 & 补充</h2>
+                <p class="text-4xl font-black text-green-400 handwritten">不干，就永远不会开始。</p>
+                <p class="text-base text-gray-400">
+                    「快速试错」>「完美憋大招」<br>
+                    最怕的不是失败，而是空白。
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- (JS Script is the same) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+            if (sections.length === 0) return;
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        if (dots[index]) dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+            sections.forEach(section => observer.observe(section));
+            exportAllBtn.addEventListener('click', async () => {
+                exportAllBtn.disabled = true;
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+                for (let i = 0; i < cards.length; i++) {
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
+                    const cardToCapture = cards[i];
+                    try {
+                        const cardBgColor = window.getComputedStyle(cardToCapture).backgroundColor;
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            backgroundColor: cardBgColor,
+                            useCORS: true, logging: false
+                        });
+                        const link = document.createElement('a');
+                        link.download = `plan-${i + 1}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    } catch (err) { console.error(`导出失败:`, err); }
+                }
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>

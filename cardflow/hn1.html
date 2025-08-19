@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HN日报 - AI 科技前沿</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* 使用 Noto Sans SC 和 Source Code Pro 字体 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #0D1117; /* 深邃的背景色 */
+            color: #E6EDF3;
+        }
+        /* 隐藏滚动条 */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* 每个 section 作为全屏容器，用于垂直居中卡片 */
+        .card-container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        /* 9:16 卡片样式 */
+        .card {
+            width: 100%;
+            max-width: 45vh; /* 在宽屏上限制宽度，保持手机屏幕大小 */
+            aspect-ratio: 9 / 16;
+            background-color: #161B22; /* 卡片背景色 */
+            border: 1px solid #30363D;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left; /* 内容左对齐 */
+            padding: 2.5rem; /* 内部留白 */
+            overflow: hidden;
+            position: relative;
+        }
+        /* 分页导航样式 */
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #30363D; /* 灰色 */
+            transition: all 0.3s ease;
+        }
+        .pagination-dot.active {
+            background-color: #58A6FF; /* 蓝色 */
+            transform: scale(1.5);
+            box-shadow: 0 0 10px #58A6FF;
+        }
+        /* 全局导出按钮样式 */
+        #export-all-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #238636;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #30363D;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+        #export-all-btn:hover {
+            background-color: #2EA043;
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 160, 67, 0.4);
+        }
+        #export-all-btn:disabled {
+            background-color: #30363D;
+            cursor: not-allowed;
+        }
+        .list-item {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #C9D1D9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 分页导航 -->
+    <nav id="pagination" class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
+
+    <!-- 全局导出按钮 -->
+    <button id="export-all-btn">一键导出所有 PNG</button>
+
+    <!-- Card 0: 标题页 -->
+    <section class="card-container">
+        <div id="card0" class="card justify-center text-center">
+            <div class="space-y-4">
+                <span class="text-lg font-mono text-gray-400">(08-18) HN日报</span>
+                <h1 class="text-3xl font-bold leading-tight text-gray-100">OpenAI发布开源模型<br>DeepMind推出Genie 3<br>新世界模型</h1>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 1: OpenAI -->
+    <section class="card-container">
+        <div id="card1" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-gray-100">🌟 OpenAI 发布开源模型</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🛠️ 开源模型库首次亮相，推动AI社区发展</li>
+                    <li class="list-item">📈 提供更透明、更可控的模型使用方式</li>
+                    <li class="list-item">🌍 助力开源生态，降低AI开发门槛</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-cyan-400"><span class="font-bold">🔮 点评：</span>OpenAI 的开源模型战略是对社区的重大支持，或将引发新一轮开源AI工具的爆发。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 2: DeepMind -->
+    <section class="card-container">
+        <div id="card2" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-gray-100">🤖 DeepMind 推出 Genie 3 世界模型</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🌌 支持复杂环境的高效建模与预测</li>
+                    <li class="list-item">🧠 为强化学习和模拟系统提供新工具</li>
+                    <li class="list-item">📊 大幅提升世界模型的推理能力</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-cyan-400"><span class="font-bold">🔮 点评：</span>Genie 3 的发布标志着世界模型技术的又一次飞跃，为AI在模拟与预测领域的应用打开了新大门。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 3: Ebook Reader -->
+    <section class="card-container">
+        <div id="card3" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-gray-100">📚 开源电子书阅读器，支持 LLM 对话</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">📖 提供与长文本交互的全新方式</li>
+                    <li class="list-item">🧑‍💻 集成 LLM，实现对话式阅读体验</li>
+                    <li class="list-item">🌟 开源项目，便于开发者扩展和定制</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-cyan-400"><span class="font-bold">🔮 点评：</span>这款工具重新定义了电子书阅读方式，为教育和知识获取提供了智能化解决方案。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card 4: Qwen3 -->
+    <section class="card-container">
+        <div id="card4" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-gray-100">🔧 Qwen3-4B-Thinking-2507 模型发布</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">🧠 4B 参数规模，性能与效率兼顾</li>
+                    <li class="list-item">🌍 专注于多任务处理与推理能力</li>
+                    <li class="list-item">📦 Hugging Face 平台可直接下载使用</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-cyan-400"><span class="font-bold">🔮 点评：</span>Qwen 系列模型的更新为中型模型市场注入了新的活力，适合更多应用场景。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Card 5: AI Search -->
+    <section class="card-container">
+        <div id="card5" class="card justify-start pt-16">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-gray-100">🔍 AI 改变搜索，引导高质量点击</h2>
+                <ul class="space-y-3">
+                    <li class="list-item">📈 AI 优化搜索结果，提高用户点击质量</li>
+                    <li class="list-item">🔄 引导更多复杂查询，提升用户体验</li>
+                    <li class="list-item">🌐 搜索引擎逐步向智能助手转型</li>
+                </ul>
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <p class="text-lg text-cyan-400"><span class="font-bold">🔮 点评：</span>AI 正在重塑搜索体验，未来的搜索引擎将更像是个贴心的知识助手。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.card-container');
+            const cards = document.querySelectorAll('.card');
+            const paginationContainer = document.getElementById('pagination');
+            const exportAllBtn = document.getElementById('export-all-btn');
+            const dots = [];
+
+            // 1. 创建分页圆点
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('pagination-dot');
+                dot.dataset.index = index;
+                paginationContainer.appendChild(dot);
+                dots.push(dot);
+            });
+
+            // 2. 使用 IntersectionObserver 监听哪个页面在视口中
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(sections).indexOf(entry.target);
+                        dots.forEach(d => d.classList.remove('active'));
+                        dots[index].classList.add('active');
+                    }
+                });
+            }, { threshold: 0.7 });
+
+            sections.forEach(section => observer.observe(section));
+
+            // 3. 为“一键导出”按钮添加事件监听
+            exportAllBtn.addEventListener('click', async () => {
+                const totalCards = cards.length;
+                exportAllBtn.disabled = true;
+                exportAllBtn.textContent = `导出中... (1/${totalCards})`;
+                
+                paginationContainer.style.display = 'none';
+                exportAllBtn.style.display = 'none';
+
+                for (let i = 0; i < totalCards; i++) {
+                    const cardToCapture = cards[i];
+                    exportAllBtn.textContent = `导出中... (${i + 1}/${totalCards})`;
+                    
+                    try {
+                        const canvas = await html2canvas(cardToCapture, {
+                            scale: 3,
+                            backgroundColor: '#161B22', // 确保背景色为卡片背景色
+                            useCORS: true,
+                            logging: false
+                        });
+                        
+                        const link = document.createElement('a');
+                        link.download = `card-${cardToCapture.id}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                    } catch (err) {
+                        console.error(`导出 #${cardToCapture.id} 失败:`, err);
+                    }
+                }
+
+                paginationContainer.style.display = 'flex';
+                exportAllBtn.style.display = 'block';
+                exportAllBtn.disabled = false;
+                exportAllBtn.textContent = '一键导出所有 PNG';
+            });
+        });
+    </script>
+</body>
+</html>
