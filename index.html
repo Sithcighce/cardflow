@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 创意工坊</title>
+    <!-- FIX: Changed script URLs to use https:// -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body { font-family: sans-serif; background-color: #f7fafc; }
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 1.5fr; /* 两栏布局 */
+            grid-template-columns: 1fr 1.5fr;
             gap: 1rem;
             height: 100vh;
             padding: 1rem;
@@ -45,7 +46,7 @@
         }
         button:hover { background-color: #4338ca; }
         button:disabled { background-color: #a5b4fc; cursor: not-allowed; }
-        #export-btn { background-color: #16a34a; } /* Green for export */
+        #export-btn { background-color: #16a34a; }
         #export-btn:hover { background-color: #15803d; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
@@ -63,9 +64,7 @@
             <div class="p-4 bg-white rounded-lg shadow-sm">
                 <label for="template-select" class="font-bold text-gray-700">2. 选择模板 (可选)</label>
                 <select id="template-select">
-                    <option value="">不使用模板 (最小化输出)</option>
-                    <option value="template1.html">褪色相片风格</option>
-                    <option value="template2.html">无声对话框风格</option>
+                    <option value="">正在加载模板...</option>
                 </select>
             </div>
 
@@ -76,7 +75,6 @@
             
             <div class="flex gap-4">
                 <button id="generate-btn" class="w-full">生成网页</button>
-                <!-- *** NEW: Added a working export button on the main page *** -->
                 <button id="export-btn" class="w-full">导出预览为 PNG</button>
             </div>
             <p id="status" class="text-sm text-center text-gray-500"></p>
@@ -84,35 +82,37 @@
 
         <!-- 右侧：预览面板 -->
         <div class="preview-panel">
-            <iframe id="preview-frame" srcdoc="<p style='text-align:center; margin-top: 2rem; color: #9ca3af;'>这里将显示生成的网页预览</p>"></iframe>
+            <iframe id="preview-frame" srcdoc="<p style='text-align:center; margin-top: 2rem; color: #9ca3af;'>请先启动Python后端，然后刷新页面</p>"></iframe>
         </div>
     </div>
 
     <script>
-        // --- 后端服务器地址 ---
-        const BACKEND_URL = 'http://127.0.0.1:8000/generate-html';
+        const BACKEND_URL = 'http://127.0.0.1:8000';
 
-        // --- 最小化模板 (已移除导出按钮和相关脚本) ---
-        const MINIMAL_TEMPLATE = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生成内容</title>
-    <script src="https://cdn.tailwindcss.com"><\/script>
-    <style>
-        body { font-family: sans-serif; scroll-snap-type: y mandatory; height: 100vh; overflow-y: scroll; background-color: #f0f0f0; }
-        .card-container { min-height: 100vh; scroll-snap-align: start; display: flex; justify-content: center; align-items: center; padding: 2rem; }
-        .card { background-color: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    </style>
-</head>
-<body>
-    <!-- AI生成的内容将替换这里 -->
-</body>
-</html>`;
+        async function loadTemplates() {
+            const selectEl = document.getElementById('template-select');
+            try {
+                const response = await fetch(`${BACKEND_URL}/templates`);
+                if (!response.ok) throw new Error('无法连接到后端服务');
+                const templates = await response.json();
+                
+                selectEl.innerHTML = '<option value="">不使用模板 (最小化输出)</option>';
+                
+                templates.forEach(template => {
+                    const option = document.createElement('option');
+                    option.value = template.filename;
+                    option.textContent = `${template.display_name} [${template.tags.格式}]`;
+                    selectEl.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('加载模板失败:', error);
+                selectEl.innerHTML = `<option value="">加载模板失败: ${error.message}</option>`;
+            }
+        }
 
         async function generate() {
+            // ... (此函数无需修改)
             const generateBtn = document.getElementById('generate-btn');
             const statusEl = document.getElementById('status');
             const previewFrame = document.getElementById('preview-frame');
@@ -132,12 +132,12 @@
             try {
                 const requestData = {
                     system_prompt: "你是一个专业的前端工程师，擅长用HTML和Tailwind CSS创建富有美感的卡片式网页。请根据用户提供的模板、素材和要求，直接生成完整的、可运行的HTML代码。重要：你的代码中不要包含任何导出按钮或html2canvas相关的脚本。",
-                    template_content: selectedTemplate ? `（模板文件名为 ${selectedTemplate}，请在后端读取并使用）` : MINIMAL_TEMPLATE,
+                    template_filename: selectedTemplate || null,
                     user_material: userMaterial,
                     user_dialog: userDialog
                 };
 
-                const response = await fetch(BACKEND_URL, {
+                const response = await fetch(`${BACKEND_URL}/generate-html`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(requestData),
@@ -162,57 +162,52 @@
             }
         }
 
-        // *** NEW: Export function that runs from the main page ***
         async function exportPreview() {
             const exportBtn = document.getElementById('export-btn');
             const statusEl = document.getElementById('status');
             const previewFrame = document.getElementById('preview-frame');
-
-            // 1. Access the document inside the iframe
-            const iframeDoc = previewFrame.contentWindow.document;
+            const iframeDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
             if (!iframeDoc) {
                 statusEl.textContent = '预览为空，无法导出。';
                 return;
             }
-
-            // 2. Find all elements to be captured (e.g., .card or .card-container)
-            const elementsToCapture = iframeDoc.querySelectorAll('.card-container, .card');
+            const elementsToCapture = iframeDoc.querySelectorAll('.card, .card-container');
             if (elementsToCapture.length === 0) {
                 statusEl.textContent = '在预览中未找到可导出的卡片。';
                 return;
             }
-
             exportBtn.disabled = true;
-            
             for (let i = 0; i < elementsToCapture.length; i++) {
                 const element = elementsToCapture[i];
                 statusEl.textContent = `正在导出... (${i + 1}/${elementsToCapture.length})`;
                 try {
+                    // *** FIX: Changed backgroundColor to null ***
+                    // This lets html2canvas capture the element's true appearance,
+                    // including gradients or backgrounds from parent elements.
                     const canvas = await html2canvas(element, {
                         scale: 3,
                         useCORS: true,
-                        backgroundColor: window.getComputedStyle(element).backgroundColor,
+                        backgroundColor: null,
                     });
                     const link = document.createElement('a');
                     link.download = `export-card-${i + 1}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
-                    await new Promise(resolve => setTimeout(resolve, 500)); // Short delay
+                    await new Promise(resolve => setTimeout(resolve, 500));
                 } catch (err) {
                     console.error('导出失败:', err);
                     statusEl.textContent = `导出第 ${i + 1} 张卡片时失败。`;
                     break; 
                 }
             }
-
             statusEl.textContent = `导出完成！共 ${elementsToCapture.length} 张。`;
             exportBtn.disabled = false;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('generate-btn').addEventListener('click', generate);
-            // *** NEW: Attach the export function to the new button ***
             document.getElementById('export-btn').addEventListener('click', exportPreview);
+            loadTemplates();
         });
     </script>
 </body>

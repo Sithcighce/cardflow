@@ -66,7 +66,7 @@
 </head>
 <body>
     <nav id="pagination" class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col space-y-3 z-10"></nav>
-    <button id="export-all-btn">一键导出所有 PNG</button>
+
 
     <section class="card-container">
         <div id="card1" class="card justify-center">
@@ -120,57 +120,5 @@
         </div>
     </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('.card-container');
-            const cards = document.querySelectorAll('.card');
-            const paginationContainer = document.getElementById('pagination');
-            const exportAllBtn = document.getElementById('export-all-btn');
-            const dots = [];
-            if (sections.length === 0) return;
-            sections.forEach((_, index) => {
-                const dot = document.createElement('div');
-                dot.classList.add('pagination-dot');
-                paginationContainer.appendChild(dot);
-                dots.push(dot);
-            });
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const index = Array.from(sections).indexOf(entry.target);
-                        dots.forEach(d => d.classList.remove('active'));
-                        if (dots[index]) dots[index].classList.add('active');
-                    }
-                });
-            }, { threshold: 0.7 });
-            sections.forEach(section => observer.observe(section));
-            exportAllBtn.addEventListener('click', async () => {
-                exportAllBtn.disabled = true;
-                paginationContainer.style.display = 'none';
-                exportAllBtn.style.display = 'none';
-                for (let i = 0; i < cards.length; i++) {
-                    exportAllBtn.textContent = `导出中... (${i + 1}/${cards.length})`;
-                    const cardToCapture = cards[i];
-                    try {
-                        const cardBgColor = window.getComputedStyle(cardToCapture).backgroundColor;
-                        const canvas = await html2canvas(cardToCapture, {
-                            scale: 3,
-                            backgroundColor: cardBgColor,
-                            useCORS: true, logging: false
-                        });
-                        const link = document.createElement('a');
-                        link.download = `mother-${i + 1}.png`;
-                        link.href = canvas.toDataURL('image/png');
-                        link.click();
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                    } catch (err) { console.error(`导出失败:`, err); }
-                }
-                paginationContainer.style.display = 'flex';
-                exportAllBtn.style.display = 'block';
-                exportAllBtn.disabled = false;
-                exportAllBtn.textContent = '一键导出所有 PNG';
-            });
-        });
-    </script>
 </body>
 </html>
